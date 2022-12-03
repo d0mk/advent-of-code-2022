@@ -1,31 +1,55 @@
 namespace AdventOfCode.Day1;
 
-using AdventOfCode.Interfaces;
+using AdventOfCode.Base;
 
-public class Solution : ISolution<int>
+public class Solution : BaseSolution<int, int>
 {
-    public int GetSolution(string inputPath)
+    private readonly Dictionary<int, IEnumerable<int>> elvesCaloriesGrouped = new();
+
+    public Solution(string inputPath)
     {
-        Dictionary<int, int> elvesCaloriesDict = new();
+        InitializeData(inputPath);
+    }
 
-        int currentElf = 1;
-        int currentTotalCalories = 0;
+    protected override void InitializeData(string inputPath)
+    {
+        fileContent = File.ReadAllLines(inputPath);
 
-        foreach (var line in File.ReadAllLines(inputPath))
+        int startIndex = 0;
+        int chunkIndex = 0;
+        int elfNumber = 0;
+
+        while (true)
         {
-            if (!string.IsNullOrEmpty(line))
-            {
-                currentTotalCalories += Convert.ToInt32(line);
-            }
-            else
-            {
-                elvesCaloriesDict.Add(currentElf, currentTotalCalories);
+            chunkIndex = Array.IndexOf(fileContent, "", startIndex);
 
-                currentElf++;
-                currentTotalCalories = 0;
+            if (chunkIndex < 0)
+            {
+                break;
             }
+            
+            var caloriesForCurrentElf = fileContent
+                .Take(new Range(startIndex, chunkIndex))
+                .Select(x => Convert.ToInt32(x));
+
+            elvesCaloriesGrouped.Add(elfNumber++, caloriesForCurrentElf);
+
+            startIndex = chunkIndex + 1;
         }
+    }
 
-        return elvesCaloriesDict.Max(x => x.Value);
+    public override int GetSolutionPart1()
+    {
+        return elvesCaloriesGrouped.Max(x => x.Value.Sum());
+    }
+
+    public override int GetSolutionPart2()
+    {
+        var summedCaloriesPerElf = elvesCaloriesGrouped.Select(x => x.Value.Sum());
+
+        return summedCaloriesPerElf
+            .OrderByDescending(x => x)
+            .Take(3)
+            .Sum();
     }
 }
