@@ -4,9 +4,9 @@ public abstract class BaseSolution<Part1ResultType, Part2ResultType>
 {
     protected string[]? fileContent;
 
-    protected virtual void InitializeData(string inputPath) => throw new NotImplementedException();
+    protected abstract void InitializeData(string inputPath);
 
-    public virtual Part1ResultType GetSolutionPart1() => throw new NotImplementedException();
+    public abstract Part1ResultType GetSolutionPart1();
 
-    public virtual Part2ResultType GetSolutionPart2() => throw new NotImplementedException();
+    public abstract Part2ResultType GetSolutionPart2();
 }
