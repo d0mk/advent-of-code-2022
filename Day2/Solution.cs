@@ -8,7 +8,7 @@ public enum RoundResult { Win = 6, Draw = 3, Loss = 0 }
 
 public class Converter
 {
-    public static GameAction ConvertFromString(string symbol)
+    public static GameAction GameActionFromString(string symbol)
     {
         return symbol.ToUpper() switch
         {
@@ -16,6 +16,17 @@ public class Converter
             "Y" or "B" => GameAction.Paper,
             "Z" or "C" => GameAction.Scissors,
             _ => throw new ArgumentOutOfRangeException(nameof(symbol))
+        };
+    }
+
+    public static RoundResult RoundResultFromGameAction(GameAction action)
+    {
+        return action switch
+        {
+            GameAction.Rock => RoundResult.Loss,
+            GameAction.Paper => RoundResult.Draw,
+            GameAction.Scissors => RoundResult.Win,
+            _ => throw new ArgumentOutOfRangeException(nameof(action))
         };
     }
 }
@@ -42,8 +53,8 @@ public class Solution : BaseSolution<int, int>
 
             var currentRoundActions = line.Split(" ");
 
-            GameAction opponentAction = Converter.ConvertFromString(currentRoundActions[0]);
-            GameAction myAction = Converter.ConvertFromString(currentRoundActions[1]);
+            GameAction opponentAction = Converter.GameActionFromString(currentRoundActions[0]);
+            GameAction myAction = Converter.GameActionFromString(currentRoundActions[1]);
 
             actionsSequence.Add((opponentAction, myAction));
         }
@@ -64,7 +75,18 @@ public class Solution : BaseSolution<int, int>
 
     public override int GetSolutionPart2()
     {
-        throw new NotImplementedException();
+        var updatedSequence = actionsSequence.Select(x =>
+            (x.Item1, Converter.RoundResultFromGameAction(x.Item2)));
+
+        int score = 0;
+
+        foreach (var (opponentAction, result) in updatedSequence)
+        {
+            var myAction = GetActionBasedOnDesiredResult(opponentAction, result);
+            score += GetPointsForCurrentRound(myAction, result);
+        }
+
+        return score;
     }
 
     private RoundResult GetMyRoundResult(GameAction opponent, GameAction me)
@@ -110,5 +132,39 @@ public class Solution : BaseSolution<int, int>
     private int GetPointsForCurrentRound(GameAction action, RoundResult result)
     {
         return (int)action + (int)result;
+    }
+
+    private GameAction GetActionBasedOnDesiredResult(GameAction opponentAction, RoundResult result)
+    {
+        // TODO: refactor
+        
+        if (result == RoundResult.Win)
+        {
+            return opponentAction switch
+            {
+                GameAction.Rock => GameAction.Paper,
+                GameAction.Paper => GameAction.Scissors,
+                GameAction.Scissors => GameAction.Rock,
+                _ => throw new ArgumentOutOfRangeException(nameof(opponentAction))
+            };
+        }
+
+        if (result == RoundResult.Draw)
+        {
+            return opponentAction;
+        }
+
+        if (result == RoundResult.Loss)
+        {
+            return opponentAction switch
+            {
+                GameAction.Rock => GameAction.Scissors,
+                GameAction.Paper => GameAction.Rock,
+                GameAction.Scissors => GameAction.Paper,
+                _ => throw new ArgumentOutOfRangeException(nameof(opponentAction))
+            };
+        }
+
+        throw new ArgumentOutOfRangeException(nameof(result));
     }
 }
