@@ -50,6 +50,23 @@ public class Solution : BaseSolution<int, int>
 
     public override int GetSolutionPart2()
     {
-        return 0;
+        int sumOfPriorities = 0;
+
+        var chunkedLines = fileContent.Chunk(3);
+
+        // TODO: refactor, slow solution
+        foreach (var chunk in chunkedLines)
+        {
+            foreach (var item in chunk[0])
+            {
+                if (chunk[1].Contains(item) && chunk[2].Contains(item))
+                {
+                    sumOfPriorities += priorities[item];
+                    break;
+                }
+            }
+        }
+
+        return sumOfPriorities;
     }
 }
