@@ -5,6 +5,7 @@
 
 # Custom entries
 input.txt
+.vscode/
 
 # User-specific files
 *.rsuser
