@@ -24,6 +24,16 @@ struct Pair
     {
         return Left >= other.Left && Right <= other.Right;
     }
+
+    public bool OverlapsWith(Pair other)
+    {
+        return Right >= other.Left;
+    }
+
+    public bool IsBefore(Pair other)
+    {
+        return (Left + Right) < (other.Left + other.Right);
+    }
 }
 
 public class Solution : BaseSolution<int, int>
@@ -67,6 +77,20 @@ public class Solution : BaseSolution<int, int>
 
     public override int GetSolutionPart2()
     {
-        throw new NotImplementedException();
+        int count = 0;
+
+        foreach (var (leftPair, rightPair) in pairs)
+        {
+            var (leftmostPair, rightmostPair) = leftPair.IsBefore(rightPair)
+                ? (leftPair, rightPair)
+                : (rightPair, leftPair);
+
+            if (leftmostPair.OverlapsWith(rightmostPair))
+            {
+                count++;
+            }
+        }
+
+        return count;
     }
 }
