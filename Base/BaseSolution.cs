@@ -4,7 +4,12 @@ public abstract class BaseSolution<Part1ResultType, Part2ResultType>
 {
     protected string[]? fileContent;
 
-    protected abstract void InitializeData(string inputPath);
+    public BaseSolution(string inputPath)
+    {
+        fileContent = File.ReadAllLines(inputPath);
+    }
+
+    protected abstract void InitializeData();
 
     public abstract Part1ResultType GetSolutionPart1();
 

@@ -35,15 +35,13 @@ public class Solution : BaseSolution<int, int>
 {
     private readonly List<(GameAction, GameAction)> actionsSequence = new List<(GameAction, GameAction)>();
 
-    public Solution(string inputPath)
+    public Solution(string inputPath) : base(inputPath)
     {
-        InitializeData(inputPath);
+        InitializeData();
     }
 
-    protected override void InitializeData(string inputPath)
+    protected override void InitializeData()
     {
-        fileContent = File.ReadAllLines(inputPath);
-
         foreach (var line in fileContent)
         {
             if (string.IsNullOrEmpty(line))

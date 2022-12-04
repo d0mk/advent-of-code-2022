@@ -6,15 +6,13 @@ public class Solution : BaseSolution<int, int>
 {
     private readonly Dictionary<char, int> priorities = new();
 
-    public Solution(string inputPath)
+    public Solution(string inputPath) : base(inputPath)
     {
-        InitializeData(inputPath);
+        InitializeData();
     }
 
-    protected override void InitializeData(string inputPath)
+    protected override void InitializeData()
     {
-        fileContent = File.ReadAllLines(inputPath);
-
         int priority = 1;
 
         for (char c = 'a'; c <= 'z'; c++)

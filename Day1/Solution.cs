@@ -6,15 +6,13 @@ public class Solution : BaseSolution<int, int>
 {
     private readonly Dictionary<int, IEnumerable<int>> elvesCaloriesGrouped = new();
 
-    public Solution(string inputPath)
+    public Solution(string inputPath) : base(inputPath)
     {
-        InitializeData(inputPath);
+        InitializeData();
     }
 
-    protected override void InitializeData(string inputPath)
+    protected override void InitializeData()
     {
-        fileContent = File.ReadAllLines(inputPath);
-
         int startIndex = 0;
         int chunkIndex = 0;
         int elfNumber = 0;
