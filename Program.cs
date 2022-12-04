@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.Linq.Expressions;
+using System.Reflection;
 using System.Text.RegularExpressions;
 
 namespace AdventOfCode;
@@ -30,11 +31,27 @@ public class Program
 
             dynamic solutionContext = Convert.ChangeType(solutionInstance, solutionType);
 
-            var part1Result = solutionContext.GetSolutionPart1();
-            var part2Result = solutionContext.GetSolutionPart2();
+            var part1Result = TryGetResult(() => solutionContext.GetSolutionPart1());
+            var part2Result = TryGetResult(() => solutionContext.GetSolutionPart2());
 
             Console.WriteLine($"Day {dayNumber++}");
             Console.WriteLine($"* Part 1: {part1Result}\n* Part 2: {part2Result}\n");
+        }
+    }
+
+    private static object? TryGetResult<T>(Func<T> method)
+    {
+        try
+        {
+            return method();
+        }
+        catch (NotImplementedException)
+        {
+            return "not implemented!";
+        }
+        catch (Exception ex)
+        {
+            return $"Unexpected error occurred: {ex.Message}";
         }
     }
 }

@@ -67,6 +67,6 @@ public class Solution : BaseSolution<int, int>
 
     public override int GetSolutionPart2()
     {
-        return 1;
+        throw new NotImplementedException();
     }
 }
