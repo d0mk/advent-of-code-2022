@@ -4,7 +4,7 @@ namespace AdventOfCode.Day6;
 
 public class Solution : BaseSolution<int, int>
 {
-    private const int MarkerLength = 4;
+    private int markerLength = 4;
 
     public Solution(string inputPath) : base(inputPath)
     {
@@ -17,14 +17,14 @@ public class Solution : BaseSolution<int, int>
     {
         string dataStream = fileContent[0];
 
-        if (dataStream.Length < MarkerLength)
+        if (dataStream.Length < markerLength)
         {
             throw new ArgumentOutOfRangeException(nameof(dataStream));
         }
 
-        for (int i = MarkerLength; i < dataStream.Length; ++i)
+        for (int i = markerLength; i < dataStream.Length; ++i)
         {
-            if (dataStream[(i - MarkerLength)..i].Distinct().Count() == MarkerLength)
+            if (dataStream[(i - markerLength)..i].Distinct().Count() == markerLength)
             {
                 return i;
             }
@@ -35,6 +35,8 @@ public class Solution : BaseSolution<int, int>
 
     public override int GetSolutionPart2()
     {
-        throw new NotImplementedException();
+        markerLength = 14;
+
+        return GetSolutionPart1();
     }
 }
