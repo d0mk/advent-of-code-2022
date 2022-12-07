@@ -4,8 +4,6 @@ namespace AdventOfCode.Day6;
 
 public class Solution : BaseSolution<int, int>
 {
-    private int markerLength = 4;
-
     public Solution(string inputPath) : base(inputPath)
     {
         InitializeData();
@@ -14,6 +12,16 @@ public class Solution : BaseSolution<int, int>
     protected override void InitializeData() { }
 
     public override int GetSolutionPart1()
+    {
+        return GetIndexOfMarkerStart(4);
+    }
+
+    public override int GetSolutionPart2()
+    {
+        return GetIndexOfMarkerStart(14);
+    }
+
+    private int GetIndexOfMarkerStart(int markerLength)
     {
         string dataStream = fileContent[0];
 
@@ -31,12 +39,5 @@ public class Solution : BaseSolution<int, int>
         }
 
         return -1;
-    }
-
-    public override int GetSolutionPart2()
-    {
-        markerLength = 14;
-
-        return GetSolutionPart1();
     }
 }
