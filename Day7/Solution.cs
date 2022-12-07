@@ -2,7 +2,7 @@ using AdventOfCode.Base;
 
 namespace AdventOfCode.Day7;
 
-public class Solution : BaseSolution<int, object>
+public class Solution : BaseSolution<int, int>
 {
     private const string TerminalSymbol = "$";
     private readonly FileSystem fileSystem = new FileSystem();
@@ -67,9 +67,26 @@ public class Solution : BaseSolution<int, object>
         yield return parentDirectory;
     }
 
-    public override object GetSolutionPart2()
+    public override int GetSolutionPart2()
     {
-        throw new NotImplementedException();
+        int totalDiskSpace = 70000000;
+        int requiredFreeSpace = 30000000;
+
+        int currentOccupiedSpace = fileSystem.RootDirectory.GetTotalSize();
+
+        List<int> sizeOfCandidatesForDeletion = new();
+
+        foreach (var directory in GetSubDirectories(fileSystem.RootDirectory))
+        {
+            int directorySize = directory.GetTotalSize();
+
+            if (totalDiskSpace - currentOccupiedSpace + directorySize >= requiredFreeSpace)
+            {
+                sizeOfCandidatesForDeletion.Add(directorySize);
+            }
+        }
+
+        return sizeOfCandidatesForDeletion.Min();
     }
 
     private void ResolveCommand(string line, FileSystem fileSystem)
