@@ -52,16 +52,13 @@ public class Solution : BaseSolution<int, int>
 
         var chunkedLines = fileContent.Chunk(3);
 
-        // TODO: refactor, slow solution
         foreach (var chunk in chunkedLines)
         {
-            foreach (var item in chunk[0])
+            var commonItems = chunk[0].Intersect(chunk[1].Intersect(chunk[2]));
+
+            foreach (var item in commonItems)
             {
-                if (chunk[1].Contains(item) && chunk[2].Contains(item))
-                {
-                    sumOfPriorities += priorities[item];
-                    break;
-                }
+                sumOfPriorities += priorities[item];
             }
         }
 
